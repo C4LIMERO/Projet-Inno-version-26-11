@@ -1,0 +1,59 @@
+import { v4 as uuidv4 } from 'uuid';
+import { Question, User } from '../types';
+
+class QuestionService {
+    private questions: Question[] = [];
+
+    constructor() {
+        // Mock data
+        this.questions = [
+            {
+                id: 'q1',
+                content: "Quand seront affichés les résultats des partiels ?",
+                author: { id: 'u1', firstName: 'Jean', lastName: 'Dupont', status: 'Student' },
+                isAnonymous: false,
+                createdAt: new Date(Date.now() - 86400000).toISOString(),
+                isAnswered: true,
+                answer: {
+                    content: "Les résultats seront disponibles le 15 janvier sur l'intranet.",
+                    answeredAt: new Date().toISOString(),
+                    answeredBy: "Administration"
+                }
+            },
+            {
+                id: 'q2',
+                content: "Est-il possible d'organiser un événement dans le hall ?",
+                author: { id: 'u2', firstName: 'Marie', lastName: 'Curie', status: 'Student' },
+                isAnonymous: true,
+                createdAt: new Date(Date.now() - 172800000).toISOString(),
+                isAnswered: false
+            }
+        ];
+    }
+
+    getAllQuestions(): Question[] {
+        return this.questions;
+    }
+
+    getAnsweredQuestions(): Question[] {
+        return this.questions.filter(q => q.isAnswered).sort((a, b) =>
+            new Date(b.answer?.answeredAt || 0).getTime() - new Date(a.answer?.answeredAt || 0).getTime()
+        );
+    }
+
+    addQuestion(content: string, author: User, isAnonymous: boolean): Question {
+        const newQuestion: Question = {
+            id: uuidv4(),
+            content,
+            author,
+            isAnonymous,
+            createdAt: new Date().toISOString(),
+            isAnswered: false
+        };
+        this.questions.push(newQuestion);
+        return newQuestion;
+    }
+}
+
+const questionService = new QuestionService();
+export default questionService;

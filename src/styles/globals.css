@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 24% 98%;
+    --foreground: 224 35% 25%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 224 35% 25%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 35% 25%;
+
+    --primary: 233 100% 31%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 23% 50%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 240 24% 95%;
+    --muted-foreground: 220 14% 46%;
+
+    --accent: 233 100% 31%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 10% 86%;
+    --input: 240 10% 86%;
+    --ring: 233 100% 31%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 220 35% 13%;
+    --foreground: 240 24% 95%;
+
+    --card: 220 35% 15%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 220 35% 15%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 233 100% 31%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 23% 50%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 35% 20%;
+    --muted-foreground: 240 24% 80%;
+
+    --accent: 233 100% 31%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 35% 30%;
+    --input: 220 35% 30%;
+    --ring: 233 100% 31%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .glass-effect {
+    @apply bg-white/80 backdrop-blur-md;
+  }
+  
+  .brand-gradient {
+    @apply bg-gradient-to-r from-brand-primary via-brand-secondary to-blue-600 bg-[length:200%_200%] animate-gradient-shift;
+  }
+  
+  .brand-shadow {
+    @apply shadow-brand;
+  }
+  
+  .btn-primary {
+    @apply bg-brand-primary text-white hover:bg-blue-800 transition-all duration-300;
+  }
+  
+  .btn-secondary {
+    @apply bg-brand-secondary text-white hover:bg-brand-primary transition-all duration-300;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white transition-all duration-300;
+  }
+
+  .text-gradient {
+    @apply inline bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-secondary;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-brand hover:-translate-y-1;
+  }
+
+  .animated-bg {
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+} 

@@ -1,0 +1,109 @@
+{
+  "ideas": [
+    {
+      "id": 1,
+      "title": "Laboratoire d'impression 3D durable à Centrale Méditerranée",
+      "description": "Créer un espace dédié avec des imprimantes 3D utilisant exclusivement des filaments recyclés et biosourcés. L'objectif est de promouvoir l'éco-conception et de permettre aux étudiants de réaliser des projets avec un impact environnemental réduit. Organisation d'ateliers de sensibilisation et de formation.",
+      "author": "Club Ingénieurs Engagés & FabLab Solidaire",
+      "date": "15 Mar 2023",
+      "votes": 78,
+      "likes": 142,
+      "tags": ["Innovation", "Développement Durable", "Technologie", "Éco-campus"],
+      "submissionDate": "2023-03-15T10:00:00.000Z",
+      "progressSteps": [
+        {"name": "Proposition initiale & étude de faisabilité", "date": "2023-03-20T10:00:00.000Z"},
+        {"name": "Sondage d'intérêt auprès des étudiants", "date": "2023-04-05T10:00:00.000Z"}
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Application Mobile Centrale Med",
+      "description": "Développer une application mobile pour les étudiants regroupant emplois du temps, actualités du campus, menus du restaurant universitaire et réservation de salles.",
+      "author": "Thomas R.",
+      "date": "3 Avr 2023",
+      "votes": 65,
+      "likes": 94,
+      "tags": ["Numérique", "Vie Étudiante", "Service"]
+    },
+    {
+      "id": 3,
+      "title": "Challenge Robotique Inter-Écoles",
+      "description": "Organiser une compétition annuelle de robotique entre les différentes écoles d'ingénieurs de la région méditerranéenne, avec sponsors industriels.",
+      "author": "Julie M.",
+      "date": "28 Fév 2023",
+      "votes": 56,
+      "likes": 112,
+      "tags": ["Événement", "Robotique", "Partenariat"]
+    },
+    {
+      "id": 4,
+      "title": "Système de Covoiturage pour le Campus",
+      "description": "Mettre en place une plateforme dédiée au covoiturage entre étudiants et personnel de l'école pour réduire l'empreinte carbone des déplacements.",
+      "author": "Paul B.",
+      "date": "10 Mar 2023",
+      "votes": 42,
+      "likes": 73,
+      "tags": ["Mobilité", "Développement Durable", "Service"]
+    },
+    {
+      "id": 5,
+      "title": "Programme de Mentorat Alumni-Étudiants",
+      "description": "Créer un réseau structuré permettant aux anciens élèves de Centrale Méditerranée de mentorer les étudiants actuels dans leur parcours professionnel.",
+      "author": "Sophie L.",
+      "date": "20 Mar 2023",
+      "votes": 51,
+      "likes": 88,
+      "tags": ["Carrière", "Réseau Alumni", "Formation"]
+    },
+    {
+      "id": 6,
+      "title": "FabLab Ouvert à la Communauté Locale",
+      "description": "Ouvrir le FabLab de l'école aux habitants et entrepreneurs locaux pour renforcer les liens avec le territoire et favoriser l'innovation collaborative.",
+      "author": "Marc D.",
+      "date": "5 Avr 2023",
+      "votes": 39,
+      "likes": 67,
+      "tags": ["Innovation", "Ouverture", "Territoire"]
+    },
+    {
+      "id": 7,
+      "title": "Parcours Pédagogique Personnalisé",
+      "description": "Implémenter un système permettant à chaque étudiant de personnaliser une partie de son cursus selon ses aspirations professionnelles et ses centres d'intérêt.",
+      "author": "Laura F.",
+      "date": "12 Mar 2023",
+      "votes": 48,
+      "likes": 102,
+      "tags": ["Pédagogie", "Formation", "Innovation"]
+    },
+    {
+      "id": 8,
+      "title": "Olympiades Scientifiques Méditerranéennes",
+      "description": "Lancer une compétition scientifique régionale abordant les défis spécifiques à la région méditerranéenne (gestion de l'eau, énergie solaire, etc.).",
+      "author": "Nicolas M.",
+      "date": "25 Mar 2023",
+      "votes": 44,
+      "likes": 86,
+      "tags": ["Événement", "Recherche", "Méditerranée"]
+    },
+    {
+      "id": 9,
+      "title": "Jardin Potager Communautaire",
+      "description": "Créer un espace de jardinage sur le campus pour sensibiliser aux enjeux agricoles et permettre aux étudiants de cultiver leurs propres légumes.",
+      "author": "Léa B.",
+      "date": "17 Mar 2023",
+      "votes": 37,
+      "likes": 64,
+      "tags": ["Campus", "Développement Durable", "Bien-être"]
+    },
+    {
+      "id": 10,
+      "title": "Centrale Méditerranée Consulting",
+      "description": "Créer une junior-entreprise spécialisée dans les problématiques méditerranéennes (gestion de l'eau, énergie solaire, tourisme durable) pour les entreprises locales.",
+      "author": "Antoine P.",
+      "date": "30 Mar 2023",
+      "votes": 63,
+      "likes": 96,
+      "tags": ["Entrepreneuriat", "Professionnalisation", "Méditerranée"]
+    }
+  ]
+} 
