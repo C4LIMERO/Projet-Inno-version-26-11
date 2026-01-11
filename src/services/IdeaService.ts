@@ -138,7 +138,10 @@ class IdeaService {
   addContributor(ideaId: string, user: User, role: ParticipationType): void {
     const idea = this.getIdeaById(ideaId);
     if (idea) {
-      if (!idea.contributors.some(c => c.user.id === user.id)) {
+      const existingContributor = idea.contributors.find(c => c.user.id === user.id);
+      if (existingContributor) {
+        existingContributor.role = role;
+      } else {
         idea.contributors.push({ user, role });
       }
     }

@@ -81,7 +81,7 @@ const ArchivesPage: NextPage = () => {
                                     className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
                                 >
                                     <div className="p-6 border-b border-gray-100 bg-gray-50">
-                                        <h3 className="text-lg font-medium text-gray-900 mb-2">{q.content}</h3>
+                                        <h3 className="text-lg font-medium text-gray-900 mb-2">{q.reformulatedContent || q.content}</h3>
                                         <div className="flex items-center text-sm text-gray-500">
                                             <span>Question posée le {formatDistanceToNow(new Date(q.createdAt), { addSuffix: true, locale: fr })}</span>
                                         </div>

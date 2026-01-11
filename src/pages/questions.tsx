@@ -16,8 +16,11 @@ import { fr } from 'date-fns/locale';
 
 import { useRouter } from 'next/router';
 
+import { useAuth } from '../contexts/AuthContext';
+
 const QuestionsPage: NextPage = () => {
     const router = useRouter();
+    const { isAuthenticated, user } = useAuth();
     const [questions, setQuestions] = useState<Question[]>([]);
     const [activeTab, setActiveTab] = useState<'list' | 'ask'>('list');
 
@@ -50,7 +53,7 @@ const QuestionsPage: NextPage = () => {
         setIsSubmitting(true);
 
         const author: User = {
-            id: 'user-' + Math.random().toString(36).substr(2, 9),
+            id: user?.email || 'user-' + Math.random().toString(36).substr(2, 9),
             firstName: formState.firstName,
             lastName: formState.lastName,
             status: formState.status
@@ -64,6 +67,11 @@ const QuestionsPage: NextPage = () => {
             // Redirect to explore page
             router.push('/explore');
         }, 1000);
+    };
+
+    const handleLogin = () => {
+        const serviceUrl = encodeURIComponent(window.location.origin + '/auth/callback');
+        window.location.href = `https://cas.centrale-med.fr/login?service=${serviceUrl}`;
     };
 
     return (
@@ -151,7 +159,15 @@ const QuestionsPage: NextPage = () => {
                             animate={{ opacity: 1, x: 0 }}
                             className="bg-white rounded-xl shadow-md p-8"
                         >
-                            {submitSuccess ? (
+                            {!isAuthenticated ? (
+                                <div className="text-center py-8">
+                                    <h3 className="text-xl font-medium text-gray-900 mb-2">Connexion requise</h3>
+                                    <p className="text-gray-600 mb-6">Vous devez être connecté pour poser une question.</p>
+                                    <Button onClick={handleLogin} className="bg-brand-primary text-white">
+                                        Se connecter
+                                    </Button>
+                                </div>
+                            ) : submitSuccess ? (
                                 <div className="text-center py-8">
                                     <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">

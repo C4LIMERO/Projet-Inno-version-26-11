@@ -164,7 +164,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     const navLinks = [
         { name: 'Accueil', path: '/' },
         { name: 'Explorer', path: '/explore' },
-        { name: 'Réussites & Réponses', path: '/archives' },
+        { name: 'Retour Admin', path: '/archives' }, // Note: Path might need to change later if we create a new page, but for now renaming the label.
         { name: 'À propos', path: '/about' },
     ];
 
@@ -261,9 +261,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                         Se connecter
                                     </Button>
                                 )}
-                                <ExplosiveButton href="/new">
-                                    Nouvelle Contribution
-                                </ExplosiveButton>
+                                <Link href="/new">
+                                    <Button className="bg-brand-primary text-white hover:bg-blue-800 rounded-full px-6">
+                                        Nouvelle Contribution
+                                    </Button>
+                                </Link>
                             </div>
 
                             <button
@@ -368,9 +370,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                         </Button>
                                     )}
 
-                                    <ExplosiveButton href="/new">
-                                        Nouvelle Contribution
-                                    </ExplosiveButton>
+                                    <Link href="/new">
+                                        <Button className="w-full bg-brand-primary text-white hover:bg-blue-800 rounded-full">
+                                            Nouvelle Contribution
+                                        </Button>
+                                    </Link>
                                 </motion.div>
                             </div>
                         </motion.div>

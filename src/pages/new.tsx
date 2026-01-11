@@ -24,8 +24,11 @@ const getCategories = () => {
 
 type SubmissionType = 'Idea' | 'Question' | null;
 
+import { useAuth } from '../contexts/AuthContext';
+
 const NewSubmissionPage: NextPage = () => {
     const router = useRouter();
+    const { isAuthenticated, user } = useAuth();
     const [submissionType, setSubmissionType] = useState<SubmissionType>(null);
     const [step, setStep] = useState(1);
 
@@ -40,6 +43,20 @@ const NewSubmissionPage: NextPage = () => {
         }
     }, [router.isReady, router.query]);
 
+    // Redirect or show login if not authenticated
+    useEffect(() => {
+        if (!isAuthenticated && router.isReady) {
+            // Optional: Redirect immediately
+            // const serviceUrl = encodeURIComponent(window.location.origin + '/auth/callback');
+            // window.location.href = `https://cas.centrale-med.fr/login?service=${serviceUrl}`;
+        }
+    }, [isAuthenticated, router.isReady]);
+
+    const handleLogin = () => {
+        const serviceUrl = encodeURIComponent(window.location.origin + '/auth/callback');
+        window.location.href = `https://cas.centrale-med.fr/login?service=${serviceUrl}`;
+    };
+
     // Unified form state
     const [formState, setFormState] = useState({
         title: '',
@@ -53,6 +70,7 @@ const NewSubmissionPage: NextPage = () => {
         participationType: 'Proposer' as ParticipationType
     });
 
+    // ... (keep existing state and handlers)
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -148,7 +166,7 @@ const NewSubmissionPage: NextPage = () => {
 
             try {
                 const author: User = {
-                    id: 'user-' + Math.random().toString(36).substr(2, 9),
+                    id: user?.email || 'user-' + Math.random().toString(36).substr(2, 9),
                     firstName: formState.firstName,
                     lastName: formState.lastName,
                     status: formState.status
@@ -181,6 +199,7 @@ const NewSubmissionPage: NextPage = () => {
         }
     };
 
+    // ... (keep render functions)
     const renderSelectionStep = () => (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -387,6 +406,25 @@ const NewSubmissionPage: NextPage = () => {
             {renderAuthorStep(true)}
         </div>
     );
+
+    if (!isAuthenticated) {
+        return (
+            <Layout>
+                <Head>
+                    <title>Connexion requise | Centrale Méditerranée</title>
+                </Head>
+                <main className="container mx-auto px-4 py-24 text-center">
+                    <div className="max-w-md mx-auto bg-white p-8 rounded-xl shadow-md">
+                        <h1 className="text-2xl font-bold mb-4">Connexion requise</h1>
+                        <p className="text-gray-600 mb-6">Vous devez être connecté pour contribuer.</p>
+                        <Button onClick={handleLogin} className="w-full bg-brand-primary text-white">
+                            Se connecter
+                        </Button>
+                    </div>
+                </main>
+            </Layout>
+        );
+    }
 
     return (
         <Layout>

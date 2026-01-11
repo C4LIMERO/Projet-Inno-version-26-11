@@ -8,7 +8,7 @@ export interface User {
     email?: string;
 }
 
-export type ParticipationType = 'Actor' | 'Proposer';
+export type ParticipationType = 'Actor' | 'Proposer' | 'Moteur';
 
 export interface Contributor {
     user: User;
@@ -30,13 +30,17 @@ export interface Idea {
 export interface Question {
     id: string;
     content: string;
+    reformulatedContent?: string;
     author: User;
     isAnonymous: boolean;
     createdAt: string;
-    answer?: {
-        content: string;
-        answeredAt: string;
-        answeredBy: string;
-    };
+    isPublic: boolean;
+    answer?: Answer;
     isAnswered: boolean;
+}
+
+export interface Answer {
+    content: string;
+    answeredAt: string;
+    answeredBy: string;
 }

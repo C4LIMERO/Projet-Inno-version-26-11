@@ -13,7 +13,7 @@ import { Idea, Question } from '../types';
 
 type SortCriteria = SortOption;
 type FilterType = 'all' | 'ideas' | 'questions';
-type Contribution = { type: 'idea', data: Idea } | { type: 'question', data: Question };
+type Contribution = { type: 'idea', data: Idea };
 
 const fadeIn = {
     initial: { opacity: 0 },
@@ -43,48 +43,24 @@ const ExplorePage: NextPage = () => {
 
     useEffect(() => {
         const ideas = ideaService.getAllIdeas().map(i => ({ type: 'idea' as const, data: i }));
-        // For explore page, we might want to show all questions or just answered ones? 
-        // The prompt says "lister à la fois les Idées et les Questions". 
-        // Usually "Explore" implies public content. 
-        // Let's assume we show all questions for now, or maybe just answered ones if that was the previous logic.
-        // But users might want to see unanswered questions too to see what's being asked.
-        // Let's fetch all questions if possible, but the service might only expose answered ones easily?
-        // Checking QuestionService... it has getAnsweredQuestions. Let's stick to that for "Explore" to avoid noise, 
-        // or maybe all? The prompt says "lister à la fois les Idées et les Questions".
-        // Let's use getAnsweredQuestions for now as it's safer for "content consumption".
-        // Wait, if I want to see my question pending, I go to /questions.
-        // Let's stick to answered questions for the "Explore" feed to keep it high quality.
-        // Fetch all questions to ensure newly submitted ones are visible
-        const questions = questionService.getAllQuestions().map(q => ({ type: 'question' as const, data: q }));
-
-        setContributions([...ideas, ...questions]);
+        setContributions(ideas);
     }, []);
 
     useEffect(() => {
         let result = [...contributions];
 
-        // Filter by Type
-        if (filterType === 'ideas') {
-            result = result.filter(c => c.type === 'idea');
-        } else if (filterType === 'questions') {
-            result = result.filter(c => c.type === 'question');
-        }
-
         // Filter by Search
         if (searchTerm) {
             const lowerTerm = searchTerm.toLowerCase();
             result = result.filter(c => {
-                if (c.type === 'idea') {
-                    return c.data.title.toLowerCase().includes(lowerTerm) || c.data.description.toLowerCase().includes(lowerTerm);
-                } else {
-                    return c.data.content.toLowerCase().includes(lowerTerm) || (c.data.answer?.content.toLowerCase().includes(lowerTerm) ?? false);
-                }
+                // c.type is always 'idea' now
+                return c.data.title.toLowerCase().includes(lowerTerm) || c.data.description.toLowerCase().includes(lowerTerm);
             });
         }
 
         // Filter by Category (Ideas only)
         if (selectedCategory) {
-            result = result.filter(c => c.type === 'idea' && c.data.tags.includes(selectedCategory));
+            result = result.filter(c => c.data.tags.includes(selectedCategory));
         }
 
         // Sort
@@ -100,15 +76,8 @@ const ExplorePage: NextPage = () => {
             return 0;
         });
 
-        // Reverse if "Oldest" (implied if we had that option, but currently we only have 'date' which is usually newest first. 
-        // The prompt asked for "Plus récentes" | "Plus anciennes".
-        // My current SortOption is just 'date' (newest) or 'title'.
-        // I should probably add a direction or just assume 'date' is newest.
-        // Let's stick to the existing logic for now, or add a toggle. 
-        // The existing `IdeaService` logic for 'date' is newest first.
-
         setFilteredContributions(result);
-    }, [contributions, searchTerm, selectedCategory, sortBy, filterType]);
+    }, [contributions, searchTerm, selectedCategory, sortBy]);
 
     const allCategories = ideaService.getAllTags();
     const displayedContributions = filteredContributions.slice(0, displayCount);
@@ -173,30 +142,7 @@ const ExplorePage: NextPage = () => {
                             initial="initial"
                             animate="animate"
                         >
-                            {/* Type Filter */}
-                            <div className="bg-white shadow-sm rounded-2xl p-5 border border-gray-100">
-                                <h3 className="text-lg font-medium text-gray-800 mb-4">Type</h3>
-                                <div className="flex flex-col space-y-2">
-                                    <button
-                                        onClick={() => setFilterType('all')}
-                                        className={`text-left py-2 px-3 rounded-xl transition ${filterType === 'all' ? 'bg-blue-50 text-brand-primary font-medium' : 'hover:bg-gray-50'}`}
-                                    >
-                                        Tout voir
-                                    </button>
-                                    <button
-                                        onClick={() => setFilterType('ideas')}
-                                        className={`text-left py-2 px-3 rounded-xl transition ${filterType === 'ideas' ? 'bg-blue-50 text-brand-primary font-medium' : 'hover:bg-gray-50'}`}
-                                    >
-                                        Idées uniquement
-                                    </button>
-                                    <button
-                                        onClick={() => setFilterType('questions')}
-                                        className={`text-left py-2 px-3 rounded-xl transition ${filterType === 'questions' ? 'bg-blue-50 text-brand-primary font-medium' : 'hover:bg-gray-50'}`}
-                                    >
-                                        Questions uniquement
-                                    </button>
-                                </div>
-                            </div>
+
 
                             {/* Sort Options */}
                             <div className="bg-white shadow-sm rounded-2xl p-5 border border-gray-100">
@@ -218,28 +164,26 @@ const ExplorePage: NextPage = () => {
                             </div>
 
                             {/* Categories (Only if Ideas are shown) */}
-                            {filterType !== 'questions' && (
-                                <div className="bg-white shadow-sm rounded-2xl p-5 border border-gray-100">
-                                    <h3 className="text-lg font-medium text-gray-800 mb-4">Thèmes (Idées)</h3>
-                                    <div className="flex flex-col space-y-2 max-h-80 overflow-y-auto pr-2">
+                            <div className="bg-white shadow-sm rounded-2xl p-5 border border-gray-100">
+                                <h3 className="text-lg font-medium text-gray-800 mb-4">Thèmes (Idées)</h3>
+                                <div className="flex flex-col space-y-2 max-h-80 overflow-y-auto pr-2">
+                                    <button
+                                        onClick={() => setSelectedCategory(null)}
+                                        className={`text-left py-2 px-3 rounded-xl transition ${selectedCategory === null ? "bg-blue-50 text-brand-primary font-medium" : "hover:bg-gray-50"}`}
+                                    >
+                                        Tous les thèmes
+                                    </button>
+                                    {allCategories.map(category => (
                                         <button
-                                            onClick={() => setSelectedCategory(null)}
-                                            className={`text-left py-2 px-3 rounded-xl transition ${selectedCategory === null ? "bg-blue-50 text-brand-primary font-medium" : "hover:bg-gray-50"}`}
+                                            key={category}
+                                            onClick={() => setSelectedCategory(category)}
+                                            className={`text-left py-2 px-3 rounded-xl transition ${selectedCategory === category ? "bg-blue-50 text-brand-primary font-medium" : "hover:bg-gray-50"}`}
                                         >
-                                            Tous les thèmes
+                                            {category}
                                         </button>
-                                        {allCategories.map(category => (
-                                            <button
-                                                key={category}
-                                                onClick={() => setSelectedCategory(category)}
-                                                className={`text-left py-2 px-3 rounded-xl transition ${selectedCategory === category ? "bg-blue-50 text-brand-primary font-medium" : "hover:bg-gray-50"}`}
-                                            >
-                                                {category}
-                                            </button>
-                                        ))}
-                                    </div>
+                                    ))}
                                 </div>
-                            )}
+                            </div>
                         </motion.div>
 
                         <div className="flex-grow">
@@ -264,11 +208,7 @@ const ExplorePage: NextPage = () => {
                                                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
                                                 className="h-full"
                                             >
-                                                {item.type === 'idea' ? (
-                                                    <IdeaCard idea={item.data} />
-                                                ) : (
-                                                    <QuestionCard question={item.data} />
-                                                )}
+                                                <IdeaCard idea={item.data} />
                                             </motion.div>
                                         ))}
                                     </motion.div>

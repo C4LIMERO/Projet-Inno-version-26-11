@@ -8,6 +8,11 @@ import IdeaStats from '../../components/IdeaDetail/IdeaStats';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
+import { useAuth } from '../../contexts/AuthContext';
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+
 interface IdeaPageProps {
   idea: Idea;
 }
@@ -15,6 +20,55 @@ interface IdeaPageProps {
 interface IdeaPathParams extends ParsedUrlQuery {
   id: string;
 }
+
+const MoteurButton = ({ idea }: { idea: Idea }) => {
+  const { isAuthenticated, user, login } = useAuth(); // login is not needed if we redirect
+  const router = useRouter();
+  const [isMoteur, setIsMoteur] = useState(
+    isAuthenticated && user ? idea.contributors.some(c => c.user.email === user.email && c.role === 'Moteur') : false
+  );
+
+  const handleBecomeMoteur = () => {
+    if (!isAuthenticated) {
+      // Redirect to login
+      const serviceUrl = encodeURIComponent(window.location.origin + '/auth/callback');
+      window.location.href = `https://cas.centrale-med.fr/login?service=${serviceUrl}`;
+      return;
+    }
+
+    if (user) {
+      // Add as Moteur
+      // We need to construct a full User object from the AuthContext user (which might be partial?)
+      // AuthContext User: { name, email, loggedInAt }
+      // IdeaService User: { id, firstName, lastName, status, email }
+      // We need to map or mock the missing fields if AuthContext doesn't have them.
+      // Let's assume we can map name to firstName/lastName.
+      const nameParts = user.name.split(' ');
+      const fullUser: any = {
+        id: user.email || 'user-' + Date.now(), // Use email as ID if available
+        firstName: nameParts[0],
+        lastName: nameParts.slice(1).join(' '),
+        status: 'Student', // Default
+        email: user.email
+      };
+
+      ideaService.addContributor(idea.id, fullUser, 'Moteur');
+      setIsMoteur(true);
+      // Force refresh or update local state
+      router.replace(router.asPath);
+    }
+  };
+
+  return (
+    <Button
+      onClick={handleBecomeMoteur}
+      disabled={isMoteur}
+      className={`${isMoteur ? 'bg-green-600 hover:bg-green-700' : 'bg-brand-primary hover:bg-blue-800'} text-white rounded-full px-6 transition-colors`}
+    >
+      {isMoteur ? 'Vous êtes Moteur !' : 'Je suis Moteur du projet'}
+    </Button>
+  );
+};
 
 const IdeaPage: NextPage<IdeaPageProps> = ({ idea }) => {
   if (!idea) {
@@ -71,8 +125,8 @@ const IdeaPage: NextPage<IdeaPageProps> = ({ idea }) => {
                   </div>
                 )}
                 <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${idea.status === 'Completed' ? 'bg-green-100 text-green-800' :
-                    idea.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
-                      'bg-yellow-100 text-yellow-800'
+                  idea.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
+                    'bg-yellow-100 text-yellow-800'
                   }`}>
                   {idea.status === 'Completed' ? 'Terminé' : idea.status === 'In Progress' ? 'En cours' : 'Proposé'}
                 </span>
@@ -86,7 +140,17 @@ const IdeaPage: NextPage<IdeaPageProps> = ({ idea }) => {
             <hr className="my-10 md:my-12 border-gray-100" />
 
             <section>
-              <h2 className="text-xl md:text-2xl font-medium text-gray-700 mb-6">Détails</h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl md:text-2xl font-medium text-gray-700">Détails</h2>
+                {/* Moteur Button */}
+                <div className="flex items-center">
+                  {/* We need to access auth context here. But IdeaPage is a NextPage, we might need to wrap it or use the hook inside. 
+                       The component is defined as `const IdeaPage: NextPage<IdeaPageProps> = ({ idea }) => { ... }`
+                       I need to import useAuth first.
+                   */}
+                  <MoteurButton idea={idea} />
+                </div>
+              </div>
               <IdeaStats idea={idea} />
             </section>
           </div>
